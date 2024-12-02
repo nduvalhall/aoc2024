@@ -1,2 +1,3 @@
-(executables
- (names part1 part2) (libraries core))
+(executable
+  (name day1)
+  (libraries core))
