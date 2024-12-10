@@ -1,55 +1,72 @@
 open! Core
 
-let map = "89010123\n78121874\n87430965\n96549874\n45678903\n32019012\n01329801\n10456732"
-
-let parse_input input =
-  String.split input ~on:'\n'
+let parse_input lines =
+  lines
   |> List.to_array
-  |> Array.map ~f:(fun s ->
-    String.to_array s
-    |> Array.map ~f:(fun c -> if Char.equal c '.' then -1 else Char.get_digit_exn c))
+  |> Array.map ~f:(fun s -> String.to_array s |> Array.map ~f:Char.get_digit_exn)
 ;;
 
-let map = parse_input map
-let dimensions map = Array.length map, Array.length map.(0)
-
-let get_nexts grid pos =
-  let i, j = pos in
-  let h, w = dimensions grid
-  and current = grid.(i).(j) in
+let next grid (i, j) =
+  let h, w = Array.length grid, Array.length grid.(0) in
+  let check (i, j) (i', j') = if grid.(i').(j') - grid.(i).(j) = 1 then true else false in
   let up =
-    if i <= 0
-    then None
-    else if grid.(i - 1).(j) - current = 1
-    then Some (i - 1, j)
-    else None
+    if i <= 0 then None else if check (i, j) (i - 1, j) then Some (i - 1, j) else None
   and right =
-    if j >= w
-    then None
-    else if grid.(i).(j + 1) - current = 1
-    then Some (i, j + 1)
-    else None
+    if j + 1 >= w then None else if check (i, j) (i, j + 1) then Some (i, j + 1) else None
   and down =
-    if i >= h
-    then None
-    else if grid.(i + 1).(j) - current = 1
-    then Some (i + 1, j)
-    else None
+    if i + 1 >= h then None else if check (i, j) (i + 1, j) then Some (i + 1, j) else None
   and left =
-    if j <= 0
-    then None
-    else if grid.(i).(j - 1) - current = 1
-    then Some (i, j - 1)
-    else None
+    if j <= 0 then None else if check (i, j) (i, j - 1) then Some (i, j - 1) else None
   in
   [ up; right; down; left ]
+  |> List.filter ~f:Option.is_some
+  |> List.map ~f:(fun o -> Option.value_exn o)
 ;;
 
-let rec climb next acc =
-  let rec aux nexts acc =
-      match nexts with
-      | [] -> acc
-      | None::tl -> aux tl acc
-      | hd::tl -> aux tl (hd::acc) 
-in  
+let climb grid start =
+  let compare_pos (i, j) (i', j') =
+    match Int.compare i i' with
+    | 0 -> Int.compare j j'
+    | cmp -> cmp
+  in
+  let rec climb_aux grid start acc =
+    match start with
+    | [] -> acc
+    | _ ->
+      let rec next_aux a's acc =
+        match a's with
+        | [] -> acc
+        | hd :: tl -> next_aux tl (next grid hd @ acc)
+      in
+      let next = next_aux start [] in
+      climb_aux grid next (start @ acc)
+  in
+  climb_aux grid [ start ] []
+  |> List.dedup_and_sort ~compare:compare_pos
+  |> List.map ~f:(fun (i, j) -> grid.(i).(j))
+  |> List.count ~f:(fun x -> x = 9)
 ;;
+
+let collect_starts grid =
+  let h, w = Array.length grid, Array.length grid.(0) in
+  let rec aux i j acc =
+    if i >= h
+    then acc
+    else if j >= w
+    then aux (i + 1) 0 acc
+    else if grid.(i).(j) = 0
+    then aux i (j + 1) ((i, j) :: acc)
+    else aux i (j + 1) acc
+  in
+  aux 0 0 []
+;;
+
+let part_1 =
+  let grid = In_channel.read_lines "day10/input.txt" |> parse_input in
+  grid
+  |> collect_starts
+  |> List.map ~f:(fun s -> climb grid s)
+  |> List.fold ~init:0 ~f:(fun acc count -> acc + count)
+;;
+
+let () = Out_channel.print_endline (Int.to_string part_1)
