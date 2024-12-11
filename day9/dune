@@ -1,6 +1,3 @@
 (executable 
   (name day9)
   (libraries core))
-(executable 
-  (name day92)
-  (libraries core))
