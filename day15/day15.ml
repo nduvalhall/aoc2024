@@ -11,7 +11,7 @@ let start grid =
   | Some (_, r) -> r
 ;;
 
-let grid, h, w, graph, instructions =
+let grid, h, w, _graph, instructions =
   let lines = In_channel.read_lines "day15/input.txt" in
   let grid =
     List.take_while lines ~f:(fun s -> not (String.is_empty s))
@@ -40,7 +40,7 @@ let grid, h, w, graph, instructions =
   grid, h, w, graph, instructions
 ;;
 
-let peek grid (x, y) direction =
+let _peek grid (x, y) direction =
   let open Direction in
   let x', y' = translate direction (x, y) in
   if x' < 0
@@ -91,7 +91,7 @@ let move_all grid instructions =
   aux grid instructions
 ;;
 
-let part_one =
+let _part_one =
   let grid = move_all grid instructions in
   Array.foldi grid ~init:[] ~f:(fun i acc r ->
     Array.foldi r ~init:acc ~f:(fun j acc c ->
