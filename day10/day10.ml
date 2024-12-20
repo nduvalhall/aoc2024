@@ -3,20 +3,39 @@ open! Core
 let parse_input lines =
   lines
   |> List.to_array
-  |> Array.map ~f:(fun s -> String.to_array s |> Array.map ~f:Char.get_digit_exn)
+  |> Array.map ~f:(fun s ->
+    String.to_array s |> Array.map ~f:Char.get_digit_exn)
 ;;
 
 let next grid (i, j) =
   let h, w = Array.length grid, Array.length grid.(0) in
-  let check (i, j) (i', j') = if grid.(i').(j') - grid.(i).(j) = 1 then true else false in
+  let check (i, j) (i', j') =
+    if grid.(i').(j') - grid.(i).(j) = 1 then true else false
+  in
   let up =
-    if i <= 0 then None else if check (i, j) (i - 1, j) then Some (i - 1, j) else None
+    if i <= 0
+    then None
+    else if check (i, j) (i - 1, j)
+    then Some (i - 1, j)
+    else None
   and right =
-    if j + 1 >= w then None else if check (i, j) (i, j + 1) then Some (i, j + 1) else None
+    if j + 1 >= w
+    then None
+    else if check (i, j) (i, j + 1)
+    then Some (i, j + 1)
+    else None
   and down =
-    if i + 1 >= h then None else if check (i, j) (i + 1, j) then Some (i + 1, j) else None
+    if i + 1 >= h
+    then None
+    else if check (i, j) (i + 1, j)
+    then Some (i + 1, j)
+    else None
   and left =
-    if j <= 0 then None else if check (i, j) (i, j - 1) then Some (i, j - 1) else None
+    if j <= 0
+    then None
+    else if check (i, j) (i, j - 1)
+    then Some (i, j - 1)
+    else None
   in
   [ up; right; down; left ]
   |> List.filter ~f:Option.is_some

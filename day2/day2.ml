@@ -22,7 +22,8 @@ let is_valid a b ~direction =
 let judge reports =
   let rec aux reports previous direction =
     match reports, previous, direction with
-    | [ head ], Some previous, Some direction -> is_valid previous head ~direction
+    | [ head ], Some previous, Some direction ->
+      is_valid previous head ~direction
     | head :: tail, None, None -> aux tail (Some head) None
     | head :: tail, Some previous, None ->
       let direction = get_direction previous head in
@@ -58,7 +59,8 @@ let exclude_one_element l =
 let () =
   let reports =
     In_channel.read_lines "day2/input.txt"
-    |> List.map ~f:(fun s -> String.split ~on:' ' s |> List.map ~f:Int.of_string)
+    |> List.map ~f:(fun s ->
+      String.split ~on:' ' s |> List.map ~f:Int.of_string)
   in
   let part1 =
     reports |> List.map ~f:judge |> List.filter ~f:(fun b -> b) |> List.length

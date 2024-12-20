@@ -120,16 +120,30 @@ let check_area matrix =
 ;;
 
 let () =
-  let input = In_channel.read_lines "day4/input.txt" |> List.map ~f:String.to_list in
+  let input =
+    In_channel.read_lines "day4/input.txt" |> List.map ~f:String.to_list
+  in
   let count =
     List.fold ~init:0 ~f:(fun acc x -> acc + count_list x) input
     + List.fold ~init:0 ~f:(fun acc x -> acc + count_list x) (transpose input)
-    + List.fold ~init:0 ~f:(fun acc x -> acc + count_list x) (main_diagonals input)
-    + List.fold ~init:0 ~f:(fun acc x -> acc + count_list x) (anti_diagonals input)
+    + List.fold
+        ~init:0
+        ~f:(fun acc x -> acc + count_list x)
+        (main_diagonals input)
+    + List.fold
+        ~init:0
+        ~f:(fun acc x -> acc + count_list x)
+        (anti_diagonals input)
     + List.fold ~init:0 ~f:(fun acc x -> acc + count_list2 x) input
     + List.fold ~init:0 ~f:(fun acc x -> acc + count_list2 x) (transpose input)
-    + List.fold ~init:0 ~f:(fun acc x -> acc + count_list2 x) (main_diagonals input)
-    + List.fold ~init:0 ~f:(fun acc x -> acc + count_list2 x) (anti_diagonals input)
+    + List.fold
+        ~init:0
+        ~f:(fun acc x -> acc + count_list2 x)
+        (main_diagonals input)
+    + List.fold
+        ~init:0
+        ~f:(fun acc x -> acc + count_list2 x)
+        (anti_diagonals input)
   in
   Out_channel.print_endline ("Part 1: " ^ Int.to_string count);
   let input =

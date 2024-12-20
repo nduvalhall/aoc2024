@@ -68,10 +68,12 @@ let traverse grid i j =
       | Some (i', j', direction) ->
         (match grid.(i).(j).visited with
          | 0 ->
-           grid.(i).(j) <- { (grid.(i).(j)) with visited = grid.(i).(j).visited + 1 };
+           grid.(i).(j)
+           <- { (grid.(i).(j)) with visited = grid.(i).(j).visited + 1 };
            traverse_aux i' j' direction (count + 1)
          | _ ->
-           grid.(i).(j) <- { (grid.(i).(j)) with visited = grid.(i).(j).visited + 1 };
+           grid.(i).(j)
+           <- { (grid.(i).(j)) with visited = grid.(i).(j).visited + 1 };
            traverse_aux i' j' direction count))
   in
   traverse_aux i j Direction.Up 1
@@ -107,7 +109,8 @@ let () =
   let part_1 = Option.value_exn (traverse (copy grid) i j) in
   let grids = grids_of_grid (copy grid) in
   let part_2 =
-    List.map grids ~f:(fun g -> traverse (copy g) i j) |> List.count ~f:Option.is_none
+    List.map grids ~f:(fun g -> traverse (copy g) i j)
+    |> List.count ~f:Option.is_none
   in
   Out_channel.print_endline ("Part 1: " ^ Int.to_string part_1);
   Out_channel.print_endline ("Part 2: " ^ Int.to_string part_2)

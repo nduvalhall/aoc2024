@@ -16,7 +16,8 @@ let split l x =
   let rec get_left_aux l acc =
     match l with
     | [] -> List.rev acc, []
-    | hd :: tl -> if hd = x then List.rev acc, tl else get_left_aux tl (hd :: acc)
+    | hd :: tl ->
+      if hd = x then List.rev acc, tl else get_left_aux tl (hd :: acc)
   in
   get_left_aux l []
 ;;
@@ -66,7 +67,8 @@ let drop_until l s =
 ;;
 
 let sort_update rules (update : int list) =
-  List.sort update ~compare:(fun a b -> if is_a_after_b rules a b then 1 else -1)
+  List.sort update ~compare:(fun a b ->
+    if is_a_after_b rules a b then 1 else -1)
 ;;
 
 let () =

@@ -1,6 +1,8 @@
 open! Core
 
-let parse_input s = s |> String.rstrip |> String.to_list |> List.map ~f:Char.get_digit_exn
+let parse_input s =
+  s |> String.rstrip |> String.to_list |> List.map ~f:Char.get_digit_exn
+;;
 
 type t =
   | File
@@ -38,7 +40,8 @@ let compress blocks =
 ;;
 
 let checksum blocks =
-  List.foldi blocks ~init:0 ~f:(fun i acc x -> if x = -1 then acc else acc + (i * x))
+  List.foldi blocks ~init:0 ~f:(fun i acc x ->
+    if x = -1 then acc else acc + (i * x))
 ;;
 
 let () =

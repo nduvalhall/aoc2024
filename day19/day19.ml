@@ -13,17 +13,6 @@ let towels, patterns =
   towels, patterns
 ;;
 
-let _print_set set =
-  let elements = Set.to_list set in
-  let elements_str = String.concat ~sep:", " elements in
-  Printf.printf "{ %s }\n" elements_str
-;;
-
-let _print_list l =
-  let formatted = "[" ^ String.concat ~sep:", " l ^ "]" in
-  Printf.printf "%s\n" formatted
-;;
-
 let possible pattern towels =
   if String.is_empty pattern
   then true
