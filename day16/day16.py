@@ -1,7 +1,7 @@
 import heapq
 from pprint import pprint as pprint
 
-with open("./test.txt") as file:
+with open("./input.txt") as file:
     grid = file.read()
     grid = [list(line) for line in grid.strip().split("\n")]
 
@@ -18,7 +18,7 @@ for y, r in enumerate(grid):
 if start is None or end is None:
     raise Exception("Start or end not found")
 
-directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 distances = [[[999999999 for _ in directions] for _ in r] for r in grid]
 visited = set()
 unvisited = [(0, start, 1)]
@@ -45,7 +45,14 @@ while len(unvisited) > 0:
             and ny < len(grid)
             and grid[ny][nx] != "#"
         ):
-            cost = 1 if d == direction else 1001
+            cost = 0
+            d_diff = abs(direction - d)
+            if d_diff == 0:
+                cost = 1
+            elif d_diff == 2:
+                cost = 2001
+            else:
+                cost = 1001
             n_distance = distance + cost
 
             if n_distance < distances[ny][nx][d]:
