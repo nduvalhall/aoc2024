@@ -1,7 +1,9 @@
 open Core
 
+type node = int * int
+
 module Graph = Map.Make (struct
-    type t = int * int
+    type t = node
 
     let compare (a1, a2) (b1, b2) =
       match Int.compare a1 b1 with
@@ -17,7 +19,7 @@ module Graph = Map.Make (struct
       match sexp with
       | Sexp.List [ Sexp.Atom a; Sexp.Atom b ] ->
         Int.of_string a, Int.of_string b
-      | _ -> failwith "Invalid sexp for ('a * (int * int))"
+      | _ -> failwith "Invalid sexp for (int * int)"
     ;;
   end)
 
@@ -53,9 +55,13 @@ let of_grid grid =
   build_graph grid 0 0 Graph.empty
 ;;
 
+let length graph = Map.length graph
+
 let print graph =
   Map.iteri graph ~f:(fun ~key:(i, j) ~data:neighbours ->
     Printf.printf "(%d, %d) -> " i j;
     List.iter neighbours ~f:(fun (i, j) -> Printf.printf "(%d, %d)  " i j);
     print_endline "")
 ;;
+
+let find node = Map.find node

@@ -11,7 +11,7 @@ let print_string_list l =
   Printf.printf "%s\n" formatted
 ;;
 
-module Key = struct
+module Coord = struct
   type t = int * int
 
   let compare (a1, a2) (b1, b2) =
@@ -31,4 +31,4 @@ module Key = struct
   ;;
 end
 
-module CoordSet = Set.Make (Key)
+module CoordSet = Set.Make (Coord)
